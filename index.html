@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Netomedia Task</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+
+
+    <div id="tabs">
+        <ul>
+            <li><a class="" href="#home" id="create-user">Create Form</a></li>
+        </ul>
+
+    </div>
+
+
+    <div id="dialog-form">
+
+        <form>
+            <fieldset style="margin-top: 0;">
+                <p class="validateTips">All form fields are required.</p>
+
+                <table>
+                    <tr>
+                        <td>Employee Number</td>
+                        <td>
+                            <input type="number" name="number" id="number" class="text ui-widget-content ui-corner-all"
+                                required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Employee Name</td>
+                        <td>
+                            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all"
+                                required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Employee Id</td>
+                        <td>
+                            <input type="number" name="idE" id="idE" class="text ui-widget-content ui-corner-all"
+                                required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Employee birthday</td>
+                        <td>
+                            <input type="date" name="birthday" id="birthday"
+                                class="text ui-widget-content ui-corner-all" required>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>Employee gender</td>
+                        <td style="display: flex;">
+                            <input type="radio" id="m" name="drone" value="m" required>
+                            <label for="m">Male</label>
+                            <input type="radio" id="f" name="drone" value="f">
+                            <label for="f">Female</label>
+                        </td>
+                    </tr> -->
+                    <input type="submit" id="add_tab" tabindex="-1" style="position:absolute; top:-1000px">
+                </table>
+            </fieldset>
+
+        </form>
+    </div>
+
+
+
+
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
