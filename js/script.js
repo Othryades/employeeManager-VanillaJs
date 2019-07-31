@@ -1,4 +1,4 @@
-//dragable function JQuery UI
+//dragable function from JQuery UI
 $(function () {
     var tabs = $("#tabs").tabs();
     tabs.find(".ui-tabs-nav").sortable({
@@ -9,7 +9,7 @@ $(function () {
     });
 });
 
-//Submit form and RegExp validation
+//Submit form and RegExp validation and create new employee
 $(function () {
     var list = employeeManager.getEmployeeArrayFromToLocalStorage();
     var dialog, form,
@@ -17,14 +17,17 @@ $(function () {
         name = $("#name"),
         idE = $("#idE"),
         birthday = $("#birthday"),
-        allFields = $([]).add(number).add(name).add(idE).add(birthday),
+        gender = $(".service").change(function () {
+            gender = $(this).val();
+        }),
+        allFields = $([]).add(number).add(name).add(idE).add(birthday).add(gender),
         tabCounter = 0,
         tabTemplate = "<li><a href='#{href}'>#{label}</a></li>",
-        tabContent = $("#tab_content"),
+        // tabContent = $("#tab_content"),
         tips = $(".validateTips");
     var tabs = $("#tabs").tabs();
 
-
+    //show an error message if not valid
     function updateTips(t) {
         tips
             .text(t)
@@ -45,6 +48,23 @@ $(function () {
         }
     }
 
+    //check age of the employee (must be over 18 y/o)
+    function checkAge(date) {
+        var month = date.slice(5, 7);
+        var day = date.substr(8, 9);
+        var year = date.substr(0, 4);
+        var age = 18;
+        var mydate = new Date();
+        mydate.setFullYear(year, month - 1, day);
+
+        var currdate = new Date();
+        currdate.setFullYear(currdate.getFullYear() - age);
+        if ((currdate - mydate) < 0) {
+            $('.validateTips').text("Sorry, only persons over the age of " + age + " may enter this site");
+            return false;
+        } else return true;
+    }
+
     function checkRegexp(o, regexp, n) {
         if (!(regexp.test(o.val()))) {
             o.addClass("ui-state-error");
@@ -54,45 +74,62 @@ $(function () {
             return true;
         }
     }
+
+    //first iteration of the employee if they exist in LocalStorage
     addTab(list);
 
+
+    //create new tab using Jquery UI
     function addTab(list) {
-        var label = list[tabCounter].name || "Tab " + tabCounter,
-            id = "tabs-" + tabCounter,
-            li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label)),
-            //   tabContentHtml = tabContent.val() || "Tab " + tabCounter + " content.";
-            tabContentHtml =
-            '<div id="users-contain" class="ui-widget">' +
-            '<table id="users" class="ui-widget ui-widget-content">' +
-            '<tr>' +
-            '<th>Employee Number :</th>' +
-            '<td>' + list[tabCounter].number + '</td>' +
-            '<tr>' +
+        if (list) {
+            for (var i = 0; i < list.length; i++) {
 
-            '<tr>' +
-            '<th>Employee Name :</th>' +
-            '<td>' + list[tabCounter].name + '</td>' +
-            '<tr>' +
+                var label = list[tabCounter].name || "Tab " + tabCounter,
+                    id = "tabs-" + tabCounter,
+                    li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 
-            '<tr>' +
-            '<th>Employee Id :</th>' +
-            '<td>' + list[tabCounter].idE + '</td>' +
-            '<tr>' +
+                tabContentHtml =
+                    '<div id="users-contain" class="ui-widget">' +
+                    '<table id="users" class="ui-widget ui-widget-content">' +
+                    '<tr>' +
+                    '<th>Employee Number :</th>' +
+                    '<td>' + list[tabCounter].number + '</td>' +
+                    '<tr>' +
 
-            '<tr>' +
-            '<th>Employee birthday :</th>' +
-            '<td>' + list[tabCounter].birthday + '</td>' +
-            '<tr>' +
+                    '<tr>' +
+                    '<th>Employee Name :</th>' +
+                    '<td>' + list[tabCounter].name + '</td>' +
+                    '<tr>' +
 
-            '</tr>' +
-            '</table>' +
-            '</div>';
+                    '<tr>' +
+                    '<th>Employee Id :</th>' +
+                    '<td>' + list[tabCounter].idE + '</td>' +
+                    '<tr>' +
 
-        tabs.find(".ui-tabs-nav").append(li);
-        tabs.append("<div id='" + id + "'><p>" + tabContentHtml + "</p></div>");
-        tabs.tabs("refresh");
-        tabCounter++;
+                    '<tr>' +
+                    '<th>Employee birthday :</th>' +
+                    '<td>' + list[tabCounter].birthday + '</td>' +
+                    '<tr>' +
+
+                    '<tr>' +
+                    '<th>Employee gender :</th>' +
+                    '<td>' + list[tabCounter].radioValue + '</td>' +
+                    '<tr>' +
+
+                    '</tr>' +
+                    '</table>' +
+                    '</div>';
+
+                tabs.find(".ui-tabs-nav").append(li);
+                tabs.append("<div id='" + id + "'><p>" + tabContentHtml + "</p></div>");
+                tabs.tabs("refresh");
+                tabCounter++;
+            }
+        }
     }
+
+
+    //create new employee and save them ib LocalStorage
     function addUser() {
         var valid = true;
         allFields.removeClass("ui-state-error");
@@ -105,20 +142,18 @@ $(function () {
         valid = valid && checkRegexp(number, /^([0-9])+$/, "Password field only allow : a-z 0-9");
         valid = valid && checkRegexp(name, /^[a-z]([a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter.");
         valid = valid && checkRegexp(idE, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9");
-        //valid = valid && checkRegexp( birthday, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-
-        //addTab function: adds new tab using the input from the form above
-        
+        var date = birthday.val();
+        valid = checkAge(date);
 
         if (valid) {
             var data = {
                 'number': number.val(),
                 'name': name.val(),
-                'id': idE.val(),
+                'idE': idE.val(),
                 'birthday': birthday.val(),
+                'radioValue': gender,
             };
             employeeManager.addToEmployeeArrayAndSaveToLocalStorage(data);
-            console.log(data);
             dialog.dialog("close");
             var list = employeeManager.getEmployeeArrayFromToLocalStorage();
             addTab(list);
@@ -151,29 +186,22 @@ $(function () {
 });
 
 
-//Object who manage employee list 
+//Object who manage localstorage of new and existing employee in LocalStorage 
 var employeeManager = {
 
-    employees: [],
+    // employees: [],
 
     addToEmployeeArrayAndSaveToLocalStorage: function (item) {
-        employeeManager.employees.push(item);
-
-        var jsonListOfEmployee = JSON.stringify(employeeManager.employees);
-        localStorage.setItem('employeesList', jsonListOfEmployee);
-        console.log(jsonListOfEmployee);
+        var oldItems = JSON.parse(localStorage.getItem('employeesList')) || [];
+        var newItem = item;
+        oldItems.push(newItem);
+        localStorage.setItem('employeesList', JSON.stringify(oldItems));
     },
 
     getEmployeeArrayFromToLocalStorage: function () {
         var list = localStorage.getItem('employeesList');
-        console.log(list);
-
         var objList = JSON.parse(list);
-
         console.log(objList);
-
         return objList;
-    },
-
-
+    }
 }

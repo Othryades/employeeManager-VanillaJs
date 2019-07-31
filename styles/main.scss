@@ -9,7 +9,6 @@ body {
   font-family: $stack-font;
 }
 
-
 /*Main style*/
 .topnav {
   overflow: hidden;
@@ -24,15 +23,14 @@ body {
   font-size: 17px;
   background-color: #ddd;
 }
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
 
 #create-user {
   background-color: #9aa0a0;
   cursor: pointer;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
 }
 
 label,
@@ -103,7 +101,6 @@ a.ui-button:active,
   background: #525154 !important;
 }
 
-
 #dialog label,
 #dialog input {
   display: block;
@@ -130,4 +127,7 @@ a.ui-button:active,
 
 #add_tab {
   cursor: pointer;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+  cursor: pointer !important;
 }
