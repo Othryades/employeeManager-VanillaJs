@@ -1,12 +1,12 @@
-Project Title:
+#Project Title:
 *employee task, vanilla js and jquery
 
-Getting Started:
+#Getting Started:
 *just open the index.html in any browser
 
-Authors:
+#Authors:
 *Moris
 
-License:
+#License:
 *This project is licensed under the MIT License - see the LICENSE.md file for details
 
